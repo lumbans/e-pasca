@@ -1,5 +1,5 @@
 
-# Strom Payment
+# e-Pasca Payment
 
 adalah web aplikasi yang memiliki fungsi untuk mengelola data pelanggan pengguna listrik pasca bayar.
 
@@ -33,11 +33,8 @@ Untuk menjalankan program ini bisa menggunakan cara berikut
 Gunakan user berikut
 
 ```bash
-  email : riyandotianto2@gmail.com
+  email : lsp07@gmail.com
   password : 12345
 ```
     
-## Authors
-
-- [@Riyan](https://github.com/ryn-crypto/)
 
