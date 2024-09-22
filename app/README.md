@@ -10,7 +10,7 @@ program ini juga memudahkan pelanggan untuk melakukan pembayaran secara online, 
 Untuk menjalankan program ini bisa menggunakan cara berikut
 
 - Download dan pindahkan file ke dalam folder lokal
-- buat database dengan nama "strom_payment"
+- buat database dengan nama "epasca_db"
 - Buka code editor
 - ubah file .env dengan nama DB_DATABASE
 - Buka terminal dan ikuti langkah berikut
