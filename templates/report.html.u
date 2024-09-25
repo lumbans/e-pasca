@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Laporan Pembayaran Listrik</h2>
+
+    {% if reports %}
+    <table class="table table-bordered mt-4">
+        <thead class="thead-light">
+            <tr>
+                <th>Nama Pelanggan</th>
+                <th>Bulan</th>
+                <th>Tahun</th>
+                <th>Jumlah Meter</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+            <tr>
+                <td>{{ report[0] }}</td>
+                <td>{{ report[1] }}</td>
+                <td>{{ report[2] }}</td>
+                <td>{{ report[3] }}</td>
+                <td>
+                    <span class="badge badge-{{ 'danger' if report[4] == 'Belum Bayar' else 'success' }}">
+                        {{ report[4] }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Tidak ada data laporan saat ini.
+    </div>
+    {% endif %}
+    <!-- Back Button -->
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mt-3">Kembali</a>
+</div>
+{% endblock %}

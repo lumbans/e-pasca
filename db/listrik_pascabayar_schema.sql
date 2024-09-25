@@ -44,7 +44,7 @@ CREATE TABLE penggunaan (
     bulan INT,
     tahun INT,
     meter_awal INT NOT NULL,
-    meter_ahir INT NOT NULL,
+    meter_akhir INT NOT NULL,
     FOREIGN KEY (id_pelanggan) REFERENCES pelanggan(id_pelanggan)
 );
 

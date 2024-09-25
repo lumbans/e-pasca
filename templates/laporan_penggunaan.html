@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Laporan Penggunaan Listrik</h2>
+
+    <!-- Form Filter Daya -->
+    <form method="GET" action="{{ url_for('laporan_penggunaan') }}" class="form-inline mb-4">
+        <label for="daya" class="mr-2">Filter berdasarkan Daya:</label>
+        <select name="daya" id="daya" class="form-control mr-2">
+            <option value="">Semua Daya</option>
+            <option value="450">450 Watt</option>
+            <option value="900">900 Watt</option>
+            <option value="1300">1300 Watt</option>
+            <option value="2200">2200 Watt</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
+    {% if penggunaan_data %}
+    <table class="table table-bordered mt-4">
+        <thead class="thead-light">
+            <tr>
+                <th>Nama Pelanggan</th>
+                <th>Bulan</th>
+                <th>Tahun</th>
+                <th>Meter Awal</th>
+                <th>Meter Akhir</th>
+                <th>Total Meter</th>
+                <th>Daya</th>
+                <th>Total Tagihan (Rp)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in penggunaan_data %}
+            <tr>
+                <td>{{ data[0] }}</td>
+                <td>{{ data[1] }}</td>
+                <td>{{ data[2] }}</td>
+                <td>{{ data[3] }}</td>
+                <td>{{ data[4] }}</td>
+                <td>{{ data[5] }}</td>
+                <td>{{ data[6] }}</td>
+                <td>{{ "{:,.2f}".format(data[7]) }}</td> <!-- Format total tagihan sebagai Rupiah -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Tidak ada data laporan saat ini.
+    </div>
+    {% endif %}
+        <!-- Back Button -->
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mt-3">Kembali</a>
+</div>
+{% endblock %}

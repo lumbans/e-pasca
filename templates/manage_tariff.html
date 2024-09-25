@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Pengelolaan Tarif Listrik - Dashboard</title>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-dark navbar-dark">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Homeß
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+        <img src="{{ url_for('static', filename='images/admin.png') }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Pasca Bayar Listrik</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{{ url_for('static', filename='images/profile.jpg') }}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">{{ session['user_name'] }}</a>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <a href="{{ url_for('dashboard') }}" class="nav-link">
+                        <i class="nav-icon fas fa-home"></i>
+                        <p>Home</p>
+                    </a>
+                </li>
+
+                <!-- Management Section -->
+                <li class="nav-header">Manajemen</li>
+                <li class="nav-item">
+                    <a href="{{ url_for('manage_tariff') }}" class="nav-link active">
+                        <i class="nav-icon fas fa-coins"></i>
+                        <p>Tarif</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('manage_tagihan') }}" class="nav-link">
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>Tagihan</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('manage_customers') }}" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Pelanggan</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('manage_users') }}" class="nav-link">
+                        <i class="nav-icon fas fa-user-shield"></i>
+                        <p>Users</p>
+                    </a>
+                </li>
+
+                <!-- Reports Section -->
+                <li class="nav-header">Reports</li>
+                <li class="nav-item">
+                    <a href="{{ url_for('usage_report') }}" class="nav-link">
+                        <i class="nav-icon fas fa-chart-line"></i>
+                        <p>Daftar Penggunaan</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('laporan_pembayaran') }}" class="nav-link">
+                        <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                        <p>Laporan Pembayaran</p>
+                    </a>
+                </li>
+
+                <!-- Profile Section -->
+                <li class="nav-header">Profil</li>
+                <li class="nav-item">
+                    <a href="{{ url_for('change_password') }}" class="nav-link">
+                        <i class="nav-icon fas fa-key"></i>
+                        <p>Ubah Password</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('logout') }}" class="nav-link text-danger">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Pengelolaan Tarif Listrik</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="card mt-3 shadow-sm">
+                    <div class="card-header bg-light text-wite">
+                        <ul class="nav nav-tabs card-header-tabs" id="manageTariffTabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="daftar-tab" data-toggle="tab" href="#daftar" role="tab" aria-controls="daftar" aria-selected="true">Daftar Tarif</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tambah-tab" data-toggle="tab" href="#tambah" role="tab" aria-controls="tambah" aria-selected="false">Tambah Tarif</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-body tab-content" color="orange" id="myTabContent">
+                        <!-- Daftar Tarif Tab -->
+                        <div class="tab-pane fade show active" id="daftar" role="tabpanel" aria-labelledby="daftar-tab">
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Daya (Watt)</th>
+                                        <th>Tarif per kWh (Rp)</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tarif in tariffs %}
+                                    <tr>
+                                        <td>{{ tarif[0] }}</td>
+                                        <td>{{ tarif[1] }}</td>
+                                        <td>{{ tarif[2] }}</td>
+                                        <td>
+                                            <button class="btn btn-warning btn-sm" onclick="editTariff({{ tarif[0] }}, '{{ tarif[1] }}', '{{ tarif[2] }}')">Edit</button>
+                                            <form method="POST" action="{{ url_for('delete_tariff', id=tarif[0]) }}" style="display:inline-block;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus tarif ini?');">
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <!-- Edit Tarif Modal -->
+                            <div class="modal fade" id="editTariffModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Edit Tarif</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form method="POST" action="{{ url_for('update_tariff') }}">
+                                            <div class="modal-body">
+                                                <input type="hidden" name="id_tarif" id="editTariffId">
+                                                <div class="form-group">
+                                                    <label for="editDaya">Daya (Watt)</label>
+                                                    <select class="form-control" name="daya" id="editDaya" required>
+                                                        <option value="">Pilih Daya</option> <!-- Placeholder option -->
+                                                        <option value="450">450</option>
+                                                        <option value="900">900</option>
+                                                        <option value="1300">1.300</option>
+                                                        <option value="2200">2.200</option>
+                                                        <option value="3500">3.500</option>
+                                                        <option value="4400">4.400</option>
+                                                        <option value="5500">5.500</option>
+                                                        <option value="7700">7.700</option>
+                                                        <option value="11000">11.000</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="editTarifPerKwh">Tarif per kWh (Rp)</label>
+                                                    <input type="number" class="form-control" name="tarif_perkwh" id="editTarifPerKwh" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tambah Tarif Tab -->
+                        <div class="tab-pane fade" id="tambah" role="tabpanel" aria-labelledby="tambah-tab">
+                            <form method="POST" action="{{ url_for('add_tariff') }}">
+                                <div class="form-group">
+                                    <label for="daya">Daya (Watt)</label>
+                                    <select class="form-control" name="daya" id="daya" required>
+                                        <option value="">Pilih Daya</option> <!-- Placeholder option -->
+                                        <option value="450">450</option>
+                                        <option value="900">900</option>
+                                        <option value="1300">1.300</option>
+                                        <option value="2200">2.200</option>
+                                        <option value="3500">3.500</option>
+                                        <option value="4400">4.400</option>
+                                        <option value="5500">5.500</option>
+                                        <option value="7700">7.700</option>
+                                        <option value="11000">11.000</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tarif_perkwh">Tarif per kWh (Rp)</label>
+                                    <input type="number" class="form-control" name="tarifperkwh" id="tarif_perkwh" required>
+                                </div>
+                                <button type="submit" class="btn btn-success">Tambah</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-inline">
+            Pasca Bayar Listrik
+        </div>
+        <strong>&copy; 2024. All rights reserved.</strong>
+    </footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/adminlte.min.js"></script>
+<script>
+    function editTariff(id, daya, tarifPerKwh) {
+        document.getElementById('editTariffId').value = id;
+        document.getElementById('editDaya').value = daya;
+        document.getElementById('editTarifPerKwh').value = tarifPerKwh;
+        $('#editTariffModal').modal('show');
+    }
+</script>
+</body>
+</html>
