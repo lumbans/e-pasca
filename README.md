@@ -86,7 +86,6 @@ Sebelum memulai, pastikan Anda telah menginstal perangkat lunak berikut:
 aplikasi-pembayaran-listrik-pasca-bayar/
 │
 ├── app.py                    # File utama aplikasi Flask
-├── config.py                 # Konfigurasi database
 ├── requirements.txt          # Daftar dependensi Python
 ├── templates/                # Folder untuk template HTML
 │   ├── base.html             # Template dasar
