@@ -61,13 +61,7 @@ Sebelum memulai, pastikan Anda telah menginstal perangkat lunak berikut:
      }
      ```
 
-5. **Inisialisasi Database**
-   - Jalankan file `init_db.py` untuk membuat tabel-tabel yang diperlukan:
-     ```bash
-     python init_db.py
-     ```
-
-6. **Menjalankan Aplikasi**
+5. **Menjalankan Aplikasi**
    ```bash
    flask run
    ```
