@@ -1,0 +1,39 @@
+START
+  numbers ← []
+  
+  WHILE TRUE DO
+    PRINT "MENU PILIHAN"
+    PRINT "1. Input angka"
+    PRINT "2. Sorting"
+    PRINT "3. Searching"
+    PRINT "4. Selesai"
+    PRINT "Masukkan pilihan [1/2/3/4]: "
+    INPUT choice
+    
+    IF choice = 1 THEN
+      PRINT "Masukkan jumlah nilai tugas: "
+      INPUT n
+      FOR i FROM 1 TO n DO
+        PRINT "Angka ", i, ": "
+        INPUT num
+        ADD num TO numbers
+      
+    ELSE IF choice = 2 THEN
+      CALL bubble_sort(numbers)
+      PRINT "Hasil sorting: ", numbers
+      
+    ELSE IF choice = 3 THEN
+      PRINT "Masukkan angka yang dicari: "
+      INPUT search_value
+      IF linear_search(numbers, search_value) THEN
+        PRINT "Angka ditemukan"
+      ELSE
+        PRINT "Angka tidak ditemukan"
+      
+    ELSE IF choice = 4 THEN
+      EXIT
+    
+    ELSE
+      PRINT "Pilihan tidak valid"
+  END WHILE
+END
