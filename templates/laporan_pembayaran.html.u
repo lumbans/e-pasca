@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/css/adminlte.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Laporan Pembayaran - Listrik Pasca Bayar</title>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-dark navbar-dark">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('common_bp.dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <a href="#" class="brand-link">
+            <img src="{{ url_for('static', filename='images/admin.png') }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">Pasca Bayar Listrik</span>
+        </a>
+        <div class="sidebar">
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="{{ url_for('static', filename='images/profile.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">{{ session['user_name'] }}</a>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item">
+                        <a href="{{ url_for('common_bp.dashboard') }}" class="nav-link active">
+                            <i class="nav-icon fas fa-home"></i>
+                            <p>Home</p>
+                        </a>
+                    </li>
+                    <!-- Your additional menu items -->
+                    <li class="nav-item">
+                        <a href="{{ url_for('report_bp.laporan_pembayaran') }}" class="nav-link">
+                            <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                            <p>Laporan Pembayaran</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Laporan Pembayaran</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h3 class="card-title">Filter Laporan Pembayaran</h3>
+                        <button class="btn btn-info" data-toggle="collapse" data-target="#filterForm"><i class="fas fa-filter"></i> Toggle Filter</button>
+                    </div>
+                    <div class="card-body collapse show" id="filterForm">
+                        <form method="GET" action="{{ url_for('report_bp.laporan_pembayaran') }}" class="form-inline mb-3">
+                            <div class="form-group mr-3">
+                                <label for="pelanggan" class="mr-2">Nama Pelanggan:</label>
+                                <select class="form-control" id="pelanggan" name="nama_pelanggan">
+                                    <option value="">Semua Pelanggan</option>
+                                    {% for pelanggan in pelanggan_list %}
+                                        <option value="{{ pelanggan }}" {% if request.args.get('nama_pelanggan') == pelanggan %}selected{% endif %}>{{ pelanggan }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group mr-3">
+                                <label for="bulan" class="mr-2">Bulan:</label>
+                                <select class="form-control" id="bulan" name="bulan">
+                                    <option value="">Semua</option>
+                                    {% for i in range(1, 13) %}
+                                    <option value="{{ i }}" {% if request.args.get('bulan') == i|string %}selected{% endif %}>{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group mr-3">
+                                <label for="tahun" class="mr-2">Tahun:</label>
+                                <input type="number" class="form-control" id="tahun" name="tahun" placeholder="Tahun" value="{{ request.args.get('tahun', '') }}">
+                            </div>
+                            <button type="submit" class="btn btn-success mr-2"><i class="fas fa-search"></i> Filter</button>
+                            <a href="{{ url_for('report_bp.laporan_pembayaran') }}" class="btn btn-secondary"><i class="fas fa-redo"></i> Reset</a>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mt-3 shadow-sm">
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Nama Pelanggan</th>
+                                    <th>Bulan</th>
+                                    <th>Tahun</th>
+                                    <th>Tanggal Pembayaran</th>
+                                    <th>Total Tagihan (Rp)</th>
+                                    <th>Biaya Admin (Rp)</th>
+                                    <th>Total Bayar (Rp)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if pembayaran_list %}
+                                    {% for pembayaran in pembayaran_list %}
+                                    <tr>
+                                        <td>{{ pembayaran[0] }}</td>
+                                        <td>{{ pembayaran[1] }}</td>
+                                        <td>{{ pembayaran[2] }}</td>
+                                        <td>{{ pembayaran[3] }}</td>
+                                        <td>{{ pembayaran[4] }}</td>
+                                        <td>{{ pembayaran[5] }}</td>
+                                        <td>{{ pembayaran[6] }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="7" class="text-center">No data available</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Back Button -->
+                <a href="{{ url_for('common_bp.dashboard') }}" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Kembali</a>
+            </div>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-inline">
+            Listrik Pasca Bayar
+        </div>
+        <strong>&copy; 2024. All rights reserved.</strong>
+    </footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/adminlte.min.js"></script>
+</body>
+</html>

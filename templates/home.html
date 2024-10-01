@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="home-container d-flex align-items-center justify-content-center" 
+     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('{{ url_for('static', filename='images/background.jpg') }}') no-repeat center center fixed; 
+            background-size: cover;">
+    <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6);"></div>
+    
+    <div class="jumbotron text-center text-white p-5" 
+         style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; z-index: 1; max-width: 600px;">
+        <h1 class="display-4 font-weight-bold" style="font-size: 2.5rem;">Selamat Datang di Pembayaran Listrik Pasca Bayar</h1>
+        <p class="lead mt-3" style="font-size: 1.25rem;">Kelola dan bayar tagihan listrik Anda dengan mudah secara online melalui aplikasi kami.</p>
+        <a class="btn btn-custom btn-lg mt-4 px-5 py-2" href="{{ url_for('auth.login') }}" role="button">Masuk Sekarang</a>
+    </div>
+</div>
+{% endblock %}

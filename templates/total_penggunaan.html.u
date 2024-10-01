@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Total Penggunaan Listrik</h2>
+    <p>Pelanggan: {{ session['user_name'] }}</p>
+    <p>Bulan: {{ bulan }}</p>
+    <p>Tahun: {{ tahun }}</p>
+    <p>Total Penggunaan (kWh): {{ total_usage }}</p>
+    <a href="{{ url_for('customer_dashboard') }}" class="btn btn-secondary mt-4">Kembali</a>
+</div>
+{% endblock %}

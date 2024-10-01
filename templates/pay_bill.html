@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Bayar Tagihan</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="amount_paid">Jumlah Bayar (Rp)</label>
+            <input type="number" class="form-control" id="amount_paid" name="amount_paid" required>
+        </div>
+        <button type="submit" class="btn btn-success">Bayar</button>
+        <a href="{{ url_for('view_bills') }}" class="btn btn-secondary">Kembali</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/css/adminlte.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Manage Tagihan - Dashboard</title>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-dark navbar-dark">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('common_bp.dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Home
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <a href="#" class="brand-link">
+            <img src="{{ url_for('static', filename='images/admin.png') }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">Pasca Bayar Listrik</span>
+        </a>
+
+        <div class="sidebar">
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="{{ url_for('static', filename='images/profile.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">{{ session['user_name'] }}</a>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item">
+                        <a href="{{ url_for('common_bp.dashboard') }}" class="nav-link active">
+                            <i class="nav-icon fas fa-home"></i>
+                            <p>Home</p>
+                        </a>
+                    </li>
+
+                    <!-- Management Section - Visible for Admin & Operator -->
+                    {% if session['user_role'] in ['admin', 'operator'] %}
+                        <li class="nav-header">Manajemen</li>
+                        {% if session['user_role'] == 'admin' %}
+                            <li class="nav-item">
+                                <a href="{{ url_for('tarif_bp.manage_tarif') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-coins"></i>
+                                    <p>Tarif</p>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a href="{{ url_for('tagihan_bp.manage_tagihan') }}" class="nav-link">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>Tagihan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('pelanggan_bp.manage_customers') }}" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Pelanggan</p>
+                            </a>
+                        </li>
+                        {% if session['user_role'] == 'admin' %}
+                            <li class="nav-item">
+                                <a href="{{ url_for('user_bp.manage_users') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-user-shield"></i>
+                                    <p>Users</p>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+
+                    <!-- Reports Section - Visible for Admin & Operator -->
+                    {% if session['user_role'] in ['admin', 'operator'] %}
+                        <li class="nav-header">Reports</li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('report_bp.usage_report') }}" class="nav-link">
+                                <i class="nav-icon fas fa-chart-line"></i>
+                                <p>Daftar Penggunaan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('report_bp.generate_report') }}" class="nav-link">
+                                <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                                <p>Laporan Pembayaran</p>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <!-- Tagihan & Pembayaran Section - Visible for Pelanggan -->
+                    {% if session['user_role'] == 'pelanggan' %}
+                        <li class="nav-header">Tagihan & Pembayaran</li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('tagihan_bp.tagihan_pelanggan_route') }}" class="nav-link">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>Lihat Tagihan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('pembayaran_bp.get_payment_history') }}" class="nav-link">
+                                <i class="nav-icon fas fa-history"></i>
+                                <p>Riwayat Pembayaran</p>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <!-- Profile Section - Visible for All Roles -->
+                    <li class="nav-header">Profil</li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('user_bp.change_password') }}" class="nav-link">
+                            <i class="nav-icon fas fa-key"></i>
+                            <p>Ubah Password</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('auth.logout') }}" class="nav-link text-danger">
+                            <i class="nav-icon fas fa-sign-out-alt"></i>
+                            <p>Logout</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Pengelolaan Tagihan</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main content - Display based on role -->
+        <section class="content">
+            <div class="container-fluid">
+                {% if session['user_role'] in ['admin', 'operator'] %}
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title">Daftar Tagihan</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Table of Data for Admin & Operator -->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Nama Pelanggan</th>
+                                        <th>Bulan</th>
+                                        <th>Tahun</th>
+                                        <th>Jumlah Meter</th>
+                                        <th>Daya (Watt)</th>
+                                        <th>Tarif per kWh (Rp)</th>
+                                        <th>Total Tagihan (Rp)</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tagihan in tagihan_list %}
+                                    <tr>
+                                        <td>{{ tagihan[1] }}</td>  <!-- nama_pelanggan -->
+                                        <td>{{ tagihan[2] }}</td>  <!-- bulan -->
+                                        <td>{{ tagihan[3] }}</td>  <!-- tahun -->
+                                        <td>{{ tagihan[4] }}</td>  <!-- jumlah_meter -->
+                                        <td>{{ tagihan[6] }}</td>  <!-- daya -->
+                                        <td>{{ tagihan[7] }}</td>  <!-- tarifperkwh -->
+                                        <td>Rp {{ "{:,.2f}".format(tagihan[8] if tagihan[8] else 0) }}</td>  
+                                        <td>
+                                            <span class="badge badge-{{ 'success' if tagihan[5] == 'Lunas' else 'danger' }}">
+                                                {{ tagihan[5] }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% elif session['user_role'] == 'pelanggan' %}
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title">Tagihan Anda</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Table of Data for Pelanggan -->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>ID Tagihan</th>
+                                        <th>Bulan</th>
+                                        <th>Tahun</th>
+                                        <th>Jumlah Meter</th>
+                                        <th>Daya (Watt)</th>
+                                        <th>Tarif per kWh (Rp)</th>
+                                        <th>Total Tagihan (Rp)</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tagihan in tagihan_pelanggan_list %}
+                                    <tr>
+                                        <td>{{ tagihan[0] }}</td>
+                                        <td>{{ tagihan[2] }}</td>  <!-- bulan -->
+                                        <td>{{ tagihan[3] }}</td>  <!-- tahun -->
+                                        <td>{{ tagihan[4] }}</td>  <!-- jumlah_meter -->
+                                        <td>{{ tagihan[6] }}</td>  <!-- daya -->
+                                        <td>{{ tagihan[7] }}</td>  <!-- tarifperkwh -->
+                                        <td>Rp {{ "{:,.2f}".format(tagihan[8] if tagihan[8] else 0) }}</td>  
+                                        <td>
+                                            <span class="badge badge-{{ 'success' if tagihan[5] == 'Lunas' else 'danger' }}">
+                                                {{ tagihan[5] }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if tagihan[5] == 'Belum Dibayar' %}
+                                            <button class="btn btn-success btn-sm bayar-btn" 
+                                                    data-id="{{ tagihan[0] }}" 
+                                                    data-total="{{ tagihan[8] }}"
+                                                    data-meter="{{ tagihan[4] }}"
+                                                    data-tarif="{{ tagihan[7] }}">
+                                                Bayar
+                                            </button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <strong>Info:</strong> Anda tidak memiliki izin untuk mengakses halaman ini.
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+    
+
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-inline">
+            Pasca Bayar Listrik
+        </div>
+        <strong>&copy; 2024. All rights reserved.</strong>
+    </footer>
+</div>
+<!-- Payment Confirmation Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalLabel">Konfirmasi Pembayaran</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin membayar tagihan ini?</p>
+                <p>Total Pembayaran: <strong>Rp <span id="total_payment"></span></strong></p>
+            </div>
+            <div class="modal-footer">
+                <form id="paymentForm" method="POST" action="">
+                    <input type="hidden" id="tagihan_id" name="id_tagihan">
+                    <input type="hidden" id="jumlah_meter" name="jumlah_meter">
+                    <input type="hidden" id="tarif_per_kwh" name="tarif_per_kwh">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">Bayar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/adminlte.min.js"></script>
+<script>
+    // JavaScript to handle the 'Bayar' button click
+    $(document).on('click', '.bayar-btn', function() {
+        var tagihanId = $(this).data('id');
+        var totalPayment = $(this).data('total');
+        var jumlahMeter = $(this).data('meter'); // Get jumlah meter from data attribute
+        var tarifPerKwh = $(this).data('tarif'); // Get tarif per kWh from data attribute
+
+        $('#tagihan_id').val(tagihanId); // Ensure this correctly sets the hidden input value
+        $('#jumlah_meter').val(jumlahMeter);
+        $('#tarif_per_kwh').val(tarifPerKwh);
+        $('#total_payment').text(totalPayment);
+        $('#paymentForm').attr('action', '/pembayaran/bayar/' + tagihanId); // This sets the action URL correctly
+        $('#paymentModal').modal('show');
+    });
+</script>
+</body>
+</html>

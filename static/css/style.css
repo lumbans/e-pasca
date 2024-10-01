@@ -1,0 +1,305 @@
+/* General Body Styling */
+body {
+    background-color: #f5f5f7; /* Subtle gray background */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Container Styling */
+.container {
+    margin-top: 20px;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    margin-top: 20px;
+    background-color: #ffffff;
+    padding: 15px;
+    border: none;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px); /* Subtle hover effect */
+}
+
+/* Jumbotron Customization */
+.jumbotron {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    margin-top: 30px;
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+}
+
+/* Button Styling */
+.btn-primary {
+    background-color: #007aff;
+    border-color: #007aff;
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #005ecb; /* Slightly darker shade on hover */
+    transform: translateY(-2px);
+}
+
+.btn-custom {
+    background-color: #007aff;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: #005ecb;
+    transform: scale(1.05);
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #e0e0e0;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+thead {
+    background-color: #f8f8f8;
+    color: #333;
+    font-weight: bold;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Footer Styling */
+footer {
+    background-color: #f5f5f7;
+    color: #999;
+    padding: 10px 0;
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Navbar Customization */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    padding: 10px 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.navbar .navbar-brand {
+    font-weight: bold;
+    color: #007aff;
+}
+
+.navbar .nav-item .nav-link {
+    color: #007aff;
+}
+
+.navbar .nav-item .nav-link:hover {
+    color: #005ecb;
+    text-decoration: underline;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    background-color: #ffffff; /* White background for a clean, Apple-like look */
+    height: 100vh; /* Ensure full height */
+    padding: 20px 0; /* Top and bottom padding */
+    position: fixed; /* Keep the sidebar fixed on the left */
+    width: 250px; /* Adjust the width as needed */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow on the right edge */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+    border-right: 1px solid #e0e0e0; /* Border on the right for separation */
+    z-index: 1000; /* Ensure it stays above other elements */
+    transition: all 0.3s ease; /* Smooth transition for toggling */
+}
+
+/* Sidebar header/logo */
+.sidebar h3 {
+    color: #007aff;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px 0;
+    margin: 0;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* Sidebar navigation link styling */
+.sidebar .nav-section-title {
+    color: #666;
+    padding: 10px 20px;
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar .nav-item {
+    padding: 0;
+}
+
+.sidebar .nav-link {
+    color: #333;
+    padding: 10px 20px;
+    display: block;
+    font-size: 14px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, padding-left 0.2s ease;
+    text-decoration: none;
+    margin: 3px 0;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #f5f5f7;
+    padding-left: 25px; /* Slightly increase padding for a hover effect */
+}
+
+.sidebar .nav-link.active {
+    background-color: #007aff;
+    color: #fff;
+    padding-left: 25px; /* Ensure the active link also has the hover effect */
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+    color: #007aff;
+    transition: color 0.2s ease;
+}
+
+.sidebar-divider {
+    border-color: #e0e0e0;
+    margin: 15px 0;
+}
+
+.sidebar ul {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+.sidebar ul li {
+    margin-bottom: 5px;
+}
+
+/* For mobile responsiveness */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        box-shadow: none;
+        border-right: none;
+    }
+
+    .sidebar .nav-link {
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .sidebar .nav-section-title {
+        text-align: left;
+        padding-left: 15px;
+    }
+
+    /* Hide the sidebar toggle by default and only show it when the menu button is clicked */
+    .sidebar.hidden {
+        display: none;
+    }
+}
+
+/* Sidebar Toggle Button */
+#sidebarToggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background-color: #007aff;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 1100;
+    transition: all 0.3s ease;
+}
+
+#sidebarToggle:hover {
+    background-color: #005ecb;
+}
+
+/* Home Page Background */
+.home-container {
+    width: 100%;
+    height: 100vh;
+    background-color: #f5f5f7;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-container .jumbotron {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem 3rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.home-container .btn-custom {
+    background-color: #007aff;
+    color: white;
+    padding: 0.5rem 2rem;
+    border-radius: 20px;
+}
+
+.home-container .btn-custom:hover {
+    background-color: #005ecb;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 1.8rem;
+    }
+    .lead {
+        font-size: 1rem;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #007aff;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #005ecb;
+}

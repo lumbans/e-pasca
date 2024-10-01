@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Pengelolaan Tarif Listrik - Dashboard</title>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-dark navbar-dark">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('common_bp.dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Home
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <a href="#" class="brand-link">
+            <img src="{{ url_for('static', filename='images/admin.png') }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">Pasca Bayar Listrik</span>
+        </a>
+
+        <div class="sidebar">
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="{{ url_for('static', filename='images/profile.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">{{ session['user_name'] }}</a>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item">
+                        <a href="{{ url_for('common_bp.dashboard') }}" class="nav-link active">
+                            <i class="nav-icon fas fa-home"></i>
+                            <p>Home</p>
+                        </a>
+                    </li>
+
+                    <!-- Management Section - Visible for Admin & Operator -->
+                    {% if session['user_role'] in ['admin', 'operator'] %}
+                        <li class="nav-header">Manajemen</li>
+                        {% if session['user_role'] == 'admin' %}
+                            <li class="nav-item">
+                                <a href="{{ url_for('tarif_bp.manage_tarif') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-coins"></i>
+                                    <p>Tarif</p>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a href="{{ url_for('tagihan_bp.manage_tagihan') }}" class="nav-link">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>Tagihan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('pelanggan_bp.manage_customers') }}" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Pelanggan</p>
+                            </a>
+                        </li>
+                        {% if session['user_role'] == 'admin' %}
+                            <li class="nav-item">
+                                <a href="{{ url_for('user_bp.manage_users') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-user-shield"></i>
+                                    <p>Users</p>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+
+                    <!-- Reports Section - Visible for Admin & Operator -->
+                    {% if session['user_role'] in ['admin', 'operator'] %}
+                        <li class="nav-header">Reports</li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('report_bp.usage_report') }}" class="nav-link">
+                                <i class="nav-icon fas fa-chart-line"></i>
+                                <p>Daftar Penggunaan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('report_bp.generate_report') }}" class="nav-link">
+                                <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                                <p>Laporan Pembayaran</p>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <!-- Tagihan & Pembayaran Section - Visible for Pelanggan -->
+                    {% if session['user_role'] == 'pelanggan' %}
+                        <li class="nav-header">Tagihan & Pembayaran</li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('tagihan_bp.manage_tagihan') }}" class="nav-link">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>Lihat Tagihan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('pembayaran_bp.get_payment_history') }}" class="nav-link">
+                                <i class="nav-icon fas fa-history"></i>
+                                <p>Riwayat Pembayaran</p>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <!-- Profile Section - Visible for All Roles -->
+                    <li class="nav-header">Profil</li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('user_bp.change_password') }}" class="nav-link">
+                            <i class="nav-icon fas fa-key"></i>
+                            <p>Ubah Password</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('auth.logout') }}" class="nav-link text-danger">
+                            <i class="nav-icon fas fa-sign-out-alt"></i>
+                            <p>Logout</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Pengelolaan Tarif Listrik</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="card mt-3 shadow-sm">
+                    <div class="card-header bg-light text-dark">
+                        <ul class="nav nav-tabs card-header-tabs" id="manageTariffTabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="daftar-tab" data-toggle="tab" href="#daftar" role="tab" aria-controls="daftar" aria-selected="true">Daftar Tarif</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tambah-tab" data-toggle="tab" href="#tambah" role="tab" aria-controls="tambah" aria-selected="false">Tambah Tarif</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-body tab-content" id="myTabContent">
+                        <!-- Daftar Tarif Tab -->
+                        <div class="tab-pane fade show active" id="daftar" role="tabpanel" aria-labelledby="daftar-tab">
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Daya (Watt)</th>
+                                        <th>Tarif per kWh (Rp)</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tarif in tarif_list %}
+                                    <tr>
+                                        <td>{{ tarif[0] }}</td>  <!-- ID -->
+                                        <td>{{ tarif[1] }}</td>  <!-- Daya (Watt) -->
+                                        <td>{{ tarif[2] }}</td>  <!-- Tarif per kWh (Rp) -->
+                                        <td>
+                                            <!-- Edit Button -->
+                                            <button class="btn btn-warning btn-sm edit-tarif-btn" 
+                                                    data-id="{{ tarif[0] }}" 
+                                                    data-daya="{{ tarif[1] }}" 
+                                                    data-tarifperkwh="{{ tarif[2] }}" 
+                                                    data-toggle="modal" 
+                                                    data-target="#editTariffModal">
+                                                Edit
+                                            </button>
+                                            <!-- Delete Button -->
+                                            <form method="POST" action="{{ url_for('tarif_bp.delete_tarif_route', id=tarif[0]) }}" style="display:inline;">
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Tambah Tarif Tab -->
+                        <div class="tab-pane fade" id="tambah" role="tabpanel" aria-labelledby="tambah-tab">
+                            <form method="POST" action="{{ url_for('tarif_bp.add_tarif_route') }}">
+                                <div class="form-group">
+                                    <label for="daya">Daya (Watt)</label>
+                                    <input type="number" class="form-control" name="daya" id="daya" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tarifperkwh">Tarif per kWh (Rp)</label>
+                                    <input type="number" class="form-control" name="tarifperkwh" id="tarifperkwh" required>
+                                </div>
+                                <button type="submit" class="btn btn-success">Tambah</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-inline">
+            Pasca Bayar Listrik
+        </div>
+        <strong>&copy; 2024. All rights reserved.</strong>
+    </footer>
+</div>
+
+<!-- Edit Tarif Modal -->
+<div class="modal fade" id="editTariffModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Tarif</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{{ url_for('tarif_bp.update_tarif_route') }}">
+                <div class="modal-body">
+                    <input type="hidden" name="id_tarif" id="editTariffId"> <!-- ID Field -->
+                    <div class="form-group">
+                        <label for="editDaya">Daya (Watt)</label>
+                        <input type="number" class="form-control" name="daya" id="editDaya" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTarifPerKwh">Tarif per kWh (Rp)</label>
+                        <input type="number" class="form-control" name="tarifperkwh" id="editTarifPerKwh" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/adminlte.min.js"></script>
+<script>
+    // Populate the edit modal with selected tariff data
+    $('.edit-tarif-btn').click(function () {
+        const id = $(this).data('id');
+        const daya = $(this).data('daya');
+        const tarifperkwh = $(this).data('tarifperkwh');
+
+        $('#editTariffId').val(id);
+        $('#editDaya').val(daya);
+        $('#editTarifPerKwh').val(tarifperkwh);
+    });
+</script>
+</body>
+</html>
